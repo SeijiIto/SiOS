@@ -1234,7 +1234,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "${SNES_CFLAGS}";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
@@ -1243,6 +1243,7 @@
 				SDKROOT = iphoneos;
 				SNES_CFLAGS = "-D__IPHONE__ -DZLIB -DUNZIP_SUPPORT -DLSB_FIRST -funsigned-char -ffast-math -fexpensive-optimizations -mstructure-size-boundary=32 -falign-functions=32 -falign-loops -falign-labels -falign-jumps -finline -finline-functions -fno-builtin -fno-common -fomit-frame-pointer -fpeel-loops -fstrength-reduce -funroll-loops -fstrict-aliasing";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -1272,6 +1273,7 @@
 				SNES_CFLAGS = "-D__IPHONE__ -DZLIB -DUNZIP_SUPPORT -DLSB_FIRST -funsigned-char -ffast-math -fexpensive-optimizations -mstructure-size-boundary=32 -falign-functions=32 -falign-loops -falign-labels -falign-jumps -finline -finline-functions -fno-builtin -fno-common -fomit-frame-pointer -fpeel-loops -fstrength-reduce -funroll-loops -fstrict-aliasing";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
@@ -1280,18 +1282,18 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/lipe/Developer/SiOS,
+					"$(SRCROOT)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Classes/Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/SNES9X/macosx\\\"",
-					"/Users/lipe/Developer/SiOS/Joypad-0.3.5",
+					"$(SRCROOT)/SNES9X/macosx",
+					"$(SRCROOT)/Joypad-0.3.5",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SNES_CFLAGS = "-funsigned-char -ffast-math -fexpensive-optimizations -mstructure-size-boundary=32 -falign-functions=32 -falign-loops -falign-labels -falign-jumps -finline -finline-functions -fno-builtin -fno-common -fomit-frame-pointer -fpeel-loops -fstrength-reduce -funroll-loops -fstrict-aliasing";
+				SNES_CFLAGS = "-funsigned-char -ffast-math -fexpensive-optimizations -falign-functions=32 -finline -finline-functions -fno-builtin -fno-common -fomit-frame-pointer -fstrength-reduce -funroll-loops -fstrict-aliasing";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1301,18 +1303,18 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/lipe/Developer/SiOS,
+					"$(SRCROOT)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Classes/Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/SNES9X/macosx\\\"",
-					"/Users/lipe/Developer/SiOS/Joypad-0.3.5",
+					"$(SRCROOT)/SNES9X/macosx",
+					"$(SRCROOT)/Joypad-0.3.5",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SNES_CFLAGS = "-funsigned-char -ffast-math -fexpensive-optimizations -mstructure-size-boundary=32 -falign-functions=32 -falign-loops -falign-labels -falign-jumps -finline -finline-functions -fno-builtin -fno-common -fomit-frame-pointer -fpeel-loops -fstrength-reduce -funroll-loops -fstrict-aliasing";
+				SNES_CFLAGS = "-funsigned-char -ffast-math -fexpensive-optimizations -falign-functions=32 -finline -finline-functions -fno-builtin -fno-common -fomit-frame-pointer -fstrength-reduce -funroll-loops -fstrict-aliasing";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
