@@ -26,19 +26,12 @@
 		_gameController = [controllers firstObject];
 		
 		[self LM_setupController:_gameController forPlayerIndex:0];
+		if (_gameController) {
+			[self.delegate gameControllerManagerGamepadDidConnect:self];
+		} else {
+			[self.delegate gameControllerManagerGamepadDidDisconnect:self];
+		}
 	}
-}
-
-- (void)LM_controllerConnected:(NSNotification*)notification
-{
-  [self LM_setupController];
-  [self.delegate gameControllerManagerGamepadDidConnect:self];
-}
-
-- (void)LM_controllerDisconnected:(NSNotification*)notification
-{
-  [self LM_setupController];
-  [self.delegate gameControllerManagerGamepadDidDisconnect:self];
 }
 
 - (void)LM_setupController:(GCController *)aController forPlayerIndex:(int)aPlayerIndex {
@@ -103,8 +96,6 @@
 			[topViewController performSelector:optionsSelector withObject:nil afterDelay:0.0];
 		}
 	};
-
-	
 }
 
 @end
@@ -113,13 +104,12 @@
 
 @implementation LMGameControllerManager
 
-- (BOOL)gameControllerConnected
-{
-  return (_gameController != nil);
+- (BOOL)gameControllerConnected {
+	BOOL result = (_gameController != nil);
+	return result;
 }
 
-+ (instancetype)sharedInstance
-{
++ (instancetype)sharedInstance {
   static dispatch_once_t p = 0;
   
   __strong static id _sharedInstance = nil;
@@ -131,46 +121,48 @@
   return _sharedInstance;
 }
 
-+ (BOOL)gameControllersMightBeAvailable
-{
-  if([GCController class] != nil)
-    return YES;
-  return NO;
++ (BOOL)gameControllersMightBeAvailable {
+	if ([GCController class] != nil) {
+		return YES;
+	}
+	return NO;
 }
 
-@end
-
-#pragma mark -
-
-@implementation LMGameControllerManager(NSObject)
-
-- (instancetype)init
-{
-  self = [super init];
-  if(self != nil)
-  {
-    [self LM_setupController];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(LM_controllerConnected:)
-                                                 name:GCControllerDidConnectNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(LM_controllerDisconnected:)
-                                                 name:GCControllerDidDisconnectNotification
-                                               object:nil];
-  }
-  return self;
+- (instancetype)init {
+	self = [super init];
+	if (self) {
+		[GCController startWirelessControllerDiscoveryWithCompletionHandler:^{
+			[self LM_setupController];
+		}];
+		
+		[self LM_setupController];
+		NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+		[defaultCenter addObserver:self
+						  selector:@selector(LM_setupController)
+							  name:GCControllerDidConnectNotification
+							object:nil];
+		[defaultCenter addObserver:self
+						  selector:@selector(LM_setupController)
+							  name:GCControllerDidDisconnectNotification
+							object:nil];
+		[defaultCenter addObserver:self
+						  selector:@selector(LM_setupController)
+							  name:UIApplicationDidBecomeActiveNotification
+							object:nil];
+		
+	}
+	return self;
 }
 
-- (void)dealloc
-{
-  [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                  name:GCControllerDidConnectNotification
-                                                object:nil];
-  [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                  name:GCControllerDidDisconnectNotification
-                                                object:nil];
+- (void)dealloc {
+	NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+	[defaultCenter removeObserver:self
+							 name:GCControllerDidConnectNotification
+						   object:nil];
+	[defaultCenter removeObserver:self
+							 name:GCControllerDidDisconnectNotification
+						   object:nil];
+	[defaultCenter removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 @end
