@@ -91,30 +91,34 @@ typedef enum _LMEmulatorAlert
 
 - (void)LM_options:(UIButton*)sender
 {
-  SISetEmulationPaused(1);
-  [self setJoypadGameState:kJPGameStateMenu];
-  
-  _customView.iCadeControlView.active = NO;
-  if([LMGameControllerManager gameControllersMightBeAvailable] == YES)
-    [_customView setControlsHidden:[LMGameControllerManager sharedInstance].gameControllerConnected animated:NO];
-  else
-    [_customView setControlsHidden:NO animated:YES];
-  
-  UIActionSheet* sheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                     delegate:self
-                                            cancelButtonTitle:NSLocalizedString(@"BACK_TO_GAME", nil)
-                                       destructiveButtonTitle:NSLocalizedString(@"EXIT_GAME", nil)
-                                            otherButtonTitles:
-                          NSLocalizedString(@"RESET", nil),
+	if (_actionSheet) {
+		[_actionSheet dismissWithClickedButtonIndex:-1 animated:YES];
+	} else {
+		SISetEmulationPaused(1);
+		[self setJoypadGameState:kJPGameStateMenu];
+		
+		_customView.iCadeControlView.active = NO;
+		if([LMGameControllerManager gameControllersMightBeAvailable] == YES)
+			[_customView setControlsHidden:[LMGameControllerManager sharedInstance].gameControllerConnected animated:NO];
+		else
+			[_customView setControlsHidden:NO animated:YES];
+		
+		UIActionSheet* sheet = [[UIActionSheet alloc] initWithTitle:nil
+														   delegate:self
+												  cancelButtonTitle:NSLocalizedString(@"BACK_TO_GAME", nil)
+											 destructiveButtonTitle:NSLocalizedString(@"EXIT_GAME", nil)
+												  otherButtonTitles:
+								NSLocalizedString(@"RESET", nil),
 #ifdef SI_ENABLE_SAVES
-                          NSLocalizedString(@"LOAD_STATE", nil),
-                          NSLocalizedString(@"SAVE_STATE", nil),
+								NSLocalizedString(@"LOAD_STATE", nil),
+								NSLocalizedString(@"SAVE_STATE", nil),
 #endif
-                          NSLocalizedString(@"SETTINGS", nil),
-                          nil];
-  _actionSheet = sheet;
-  [sheet showInView:self.view];
-  [sheet autorelease];
+								NSLocalizedString(@"SETTINGS", nil),
+								nil];
+		_actionSheet = sheet;
+		[sheet showInView:self.view];
+		[sheet autorelease];
+	}
 }
 
 #pragma mark SIScreenDelegate

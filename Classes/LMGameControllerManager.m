@@ -24,7 +24,7 @@
     // Grab first controller
     // TODO: Add support for multiple controllers
     _gameController = [controllers firstObject];
-    
+	_gameController.playerIndex = 0;
     __weak id weakSelf = self;
     
     _gameController.gamepad.valueChangedHandler = ^(GCGamepad* gamepad, GCControllerElement* element) {
@@ -33,6 +33,16 @@
     _gameController.extendedGamepad.valueChangedHandler = ^(GCExtendedGamepad* gamepad, GCControllerElement* element) {
       [weakSelf LM_getCurrentControllerInput];
     };
+	  _gameController.controllerPausedHandler = ^(GCController *controller) {
+		  SEL optionsSelector = @selector(LM_options:);
+		  UIViewController *topViewController = [[[[UIApplication sharedApplication] windows] firstObject] rootViewController];
+		  while (topViewController.presentedViewController) {
+			  topViewController = topViewController.presentedViewController;
+		  }
+		  if ([topViewController respondsToSelector:optionsSelector]) {
+			  [topViewController performSelector:optionsSelector withObject:nil afterDelay:0.0];
+		  }
+	  };
   }
 }
 
@@ -106,6 +116,17 @@
        }
        */
       
+		if (extendedGamepad.leftTrigger.pressed) {
+			SISetControllerPushButton(kSIOS_1PSelect);
+		} else {
+			SISetControllerReleaseButton(kSIOS_1PSelect);
+		}
+		if (extendedGamepad.rightTrigger.pressed) {
+			SISetControllerPushButton(kSIOS_1PStart);
+		} else {
+			SISetControllerReleaseButton(kSIOS_1PStart);
+		}
+		
       // Extended Gamepad gets a thumbstick as well
       if (extendedGamepad.dpad.up.pressed || extendedGamepad.leftThumbstick.up.pressed) {
         SISetControllerPushButton(kSIOS_1PUp);
